@@ -1,0 +1,37 @@
+<?php include 'server.php';
+    // if user is not logged in, they cannot access this page
+    if (empty($_SESSION['companyname']))
+    {
+        header('location: start.html');
+    }
+?>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>User Login</title>
+	<link rel = "stylesheet" type = "text/css" href = "style.css">
+</head>
+<body>
+	<div class = "header">
+		<h2>Home page</h2>
+	</div>
+	
+	<div class = "content">
+		<?php if (isset($_SESSION["success"])):?>
+<!-- 			<div class="error success"> -->
+<!-- 				<h3> -->
+					<?php 
+// 					   echo $_SESSION["success"];
+// 					   unset($_SESSION["success"]);
+// 					?>
+<!-- 				</h3> -->
+<!-- 			</div> -->
+		<?php endif ?>
+		
+		<?php if (isset($_SESSION["companyname"])):?>
+			<p>Welcome <strong><?php echo $_SESSION["companyname"];?></strong></p>
+			<p><a href="index_company.php?logout='1'" style = "color: red;">Logout</a></p>
+		<?php endif?>
+	</div>
+</body>
+</html>
