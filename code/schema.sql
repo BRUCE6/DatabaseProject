@@ -100,11 +100,12 @@ drop table if exists notify_apply;
 create table notify_apply(
 	sid int not null,
     jid int not null,
-    cid int not null,
 	`time` datetime,
+    cid int not null,
     `status` enum('view', 'unview'),
-    primary key (sid, jid, cid, `time`),
-    foreign key (sid, jid) references apply (sid, jid)
+    primary key (sid, jid, `time`),
+    foreign key (sid, jid) references apply (sid, jid),
+    foreign key (cid) references company (cid)
 );
 
 drop table if exists notify_job;
@@ -122,9 +123,13 @@ drop procedure if exists add_friend;
 create procedure add_friend (sid1 int, sid2 int)
 insert into friend (sid1, sid2, `time`) values (sid1, sid2, NOW()), (sid2, sid1, NOW());
 
+drop procedure if exists delete_friend;
+create procedure delete_friend (s1 int, s2 int)
+delete from friend where (sid1 = s1 and sid2 = s2) or (sid1 = s2 and sid2 = s1);
+
 drop procedure if exists request_friend;
 create procedure request_friend (from_id int, to_id int)
-insert into notify_friend_request (from_sid, to_sid, `time`, receive_status, answer_status) values (from_id, to_id, date_add(NOW(), interval -2 month),'unview', 'view');
+insert into notify_friend_request (from_sid, to_sid, `time`, receive_status, answer_status) values (from_id, to_id, NOW(),'unview', 'view');
 
 drop procedure if exists answer_friend;
 delimiter //
@@ -142,3 +147,25 @@ delimiter ;
 drop procedure if exists follow_company;
 create procedure follow_company(sid int, cid int)
 insert into follow (sid, cid, `time`) values (sid, cid, NOW());
+
+drop procedure if exists unfollow_company;
+create procedure unfollow_company(s int, c int)
+delete from follow where sid = s and cid = c;
+
+drop procedure if exists post_job;
+delimiter //
+create procedure post_job(cid int, location varchar(500), title varchar(500), salary varchar(100), background varchar(100), description varchar(1000))
+begin
+	insert into job (cid, `time`, location, title, salary, background, description) values (cid, NOW(), location, title, salary, background, description);
+	insert into notify_job (jid, `time`, `status`, sid) select * from ((select LAST_INSERT_ID(), NOW(), 'unview') t1 JOIN (select sid from follow where follow.cid = cid) t2);
+end//
+delimiter ;
+
+drop procedure if exists apply_job;
+delimiter //
+create procedure apply_job(s int, j int, c int)
+begin
+	insert into apply values (s, j, NOW(), 'Under view');
+	insert into notify_apply values (s, j, NOW(), c, 'unview');
+end//
+delimiter ;

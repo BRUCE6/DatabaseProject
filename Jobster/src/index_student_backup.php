@@ -1,15 +1,15 @@
 <?php include 'server.php';
     // if user is not logged in, they cannot access this page
-    if (empty($_SESSION['companyname']))
+    if (empty($_SESSION['username']))
     {
-        header('location: start.html');
+        header('location: /Jobster/start.html');
     }
 ?>
 <!DOCTYPE html>
 <html>
 <head>
 	<title>User Login</title>
-	<link rel = "stylesheet" type = "text/css" href = "style.css">
+	<link rel = "stylesheet" type = "text/css" href = "../css/style_log.css">
 </head>
 <body>
 	<div class = "header">
@@ -28,9 +28,9 @@
 <!-- 			</div> -->
 		<?php endif ?>
 		
-		<?php if (isset($_SESSION["companyname"])):?>
-			<p>Welcome <strong><?php echo $_SESSION["companyname"];?></strong></p>
-			<p><a href="index_company.php?logout='1'" style = "color: red;">Logout</a></p>
+		<?php if (isset($_SESSION["username"])):?>
+			<p>Welcome <strong><?php echo $_SESSION["username"];?></strong></p>
+			<p><a href="index_student.php?logout='1'" style = "color: red;">Logout</a></p>
 		<?php endif?>
 	</div>
 </body>

@@ -3,7 +3,7 @@
 <html>
 <head>
 	<title>User Login</title>
-	<link rel = "stylesheet" type = "text/css" href = "style.css">
+	<link rel = "stylesheet" type = "text/css" href = "../css/style_log.css">
 </head>
 <body>
 	<div class = "header">
