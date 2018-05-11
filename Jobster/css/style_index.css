@@ -29,6 +29,29 @@ a:hover, a:active {
 	color: #fff;
 }
 
+.error {
+	width: 300px;
+	margin: 10px 0px;
+	padding: 10px;
+	border: 1px solid #a94442;
+	color: #a94442;
+	background: #f2dede;
+	border-radius: 5px;
+	text-align: left;
+}
+
+.success {
+	width: 300px;
+	margin: 10px 0px;
+	padding: 10px;
+	border: 1px solid #008080;
+	color: #008080;
+	background: #10ef6f;
+	border-radius: 5px;
+	text-align: left;
+}
+
+
 .full {
 	height: 75px;
 	width: 100%;
@@ -205,20 +228,22 @@ a:hover, a:active {
 	background-color: #d6d6d6;
 	margin-left: auto;
 	margin-right: auto;
-	width: 100%;
 	padding: 10px 200px;
 }
 
+.content h2 {
+	padding: 10px;
+}
 .content table {
 	table-layout: fixed;
 	border-collapse: collapse;
-    width: 60%;
+    width: 70%;
     font-size: 22px;
 }
 
 .content tbody {
     display: block;
-    max-height: 400px;
+    max-height: 450px;
     overflow-y: auto;    /* Trigger vertical scroll    */
     overflow-x: hidden; 
 }

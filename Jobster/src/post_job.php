@@ -15,7 +15,7 @@
 		<?php include('errors.php'); ?>
 		<table>
 			<tr>
-    			<th width = 20%>location</th>
+    			<th width = 30%>location</th>
     			<td><input type = "text" name = "job_location"></td>
     		</tr>
     		<tr>
@@ -32,7 +32,8 @@
     		</tr>
     		<tr>
     			<th>description</th>
-    			<td><input type = "text" name = "job_description"></td>
+    			<td><textarea name = "job_description" rows="10" cols="50"></textarea>
+    			</td>
     		</tr>
     		<tr>
     			<th><button type = "submit" name = "job_post" class = "btn">Post</button></th>

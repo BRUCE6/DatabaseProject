@@ -17,9 +17,52 @@
 <?php require_once $_SERVER["DOCUMENT_ROOT"] . '/Jobster/src/menu_company.php';?>
 <?php require_once $_SERVER["DOCUMENT_ROOT"] . '/Jobster/src/nav_company.php';?>
 <div class = "content">
-<?php if (isset($_SESSION["companyname"])):?>
-	<p>Welcome <strong><?php echo $_SESSION["company_id"];?></strong></p>
-	<p><a href="index_company.php?logout='1'" style = "color: red;">Logout</a></p>
-<?php endif?>
+<!-- 	Search box -->
+	<form method = "post" action = "search_apply.php">
+		<table>
+			<tr>
+				<th>University</th>
+				<td><input type = "text" name = "apply_university"></td>
+			</tr>
+			<tr>
+				<th>Major</th>
+				<td><input type = "text" name = "apply_major"></td>
+			</tr>
+			<tr>
+				<th><button type = "submit" name = "apply_search">Search</button></th>
+				<td></td>
+			</tr>
+		</table>
+	</form>
+<!-- 	Applicants -->
+	<h2>All applicants</h2>
+	<?php 
+    $query = "SELECT J.jid, S.sid, S.sname, S.university, S.major, J.location, J.title, A.time from student S, apply A, job J WHERE ".
+        "A.jid = J.jid AND S.sid = A.sid AND J.cid = ".$_SESSION['company_id']." ORDER BY time DESC";
+    #echo $query;
+    $result = mysqli_query($db, $query);
+    ?>
+    <?php if (mysqli_num_rows($result) > 0): ?>
+    	<table>
+    		<tr>
+    			<th width = 30%>Apply time</th>
+    			<th>Name</th>
+    			<th>University</th>
+    			<th>Major</th>
+    			<th>Title</th>
+    			<th>Location</th>
+    		</tr>
+    		<?php foreach ($result as $r):?>
+    		<tr>
+    			<td><?php echo $r['time'];?></td>
+    			<td><a href = 'info_student.php?info_student=<?php echo $r['sid']?>'><?php echo $r['sname'];?></a></td>
+    			<td><?php echo $r['university'];?></td>
+    			<td><?php echo $r['major'];?></td>
+    			<td><?php echo $r['title'];?></td>
+    			<td><?php echo $r['location'];?></td>
+    		</tr>
+    		<?php endforeach?>
+    	</table>
+    <?php endif?>
 </div>
 <?php require_once $_SERVER["DOCUMENT_ROOT"] . '/Jobster/src/footer.php';?>

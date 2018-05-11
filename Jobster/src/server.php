@@ -16,9 +16,10 @@
     {
         $username = mysqli_real_escape_string($db, $_POST['username']);
         $password = mysqli_real_escape_string($db, $_POST['password']);
-//         $email = mysqli_real_escape_string($db, $_POST['username']);
+        $university = mysqli_real_escape_string($db, $_POST['university']);
+        $gpa = mysqli_real_escape_string($db, $_POST['gpa']);
         $name = mysqli_real_escape_string($db, $_POST['name']);
-//         $username = mysqli_real_escape_string($db, $_POST['username']);
+        $major = mysqli_real_escape_string($db, $_POST['major']);
 
         // ensure that form fiels are filled properly
         if (empty($username))
@@ -41,8 +42,13 @@
         // username cannot be used
         if (count($errors) == 0)
         {
-            $sql = "SELECT sname FROM student WHERE login_name = '$username'";
-            $result = mysqli_query($db, $sql);
+            mysqli_query($db, "START TRANSACTION"); 
+            $stmt = $db->prepare("SELECT * FROM student WHERE login_name = ? FOR UPDATE");
+            $stmt->bind_param('s', $username);
+            $stmt->execute();
+            $result = $stmt->get_result();
+//             $sql = "SELECT * FROM student WHERE login_name = '$username' FOR UPDATE";
+//             $result = mysqli_query($db, $sql);
             if (mysqli_num_rows($result) > 0)
             {
                 array_push($errors, "Username have already been taken.");
@@ -52,9 +58,10 @@
         if (count($errors) == 0)
         {
             $password = md5($password); //encrypt password
-            $sql = "INSERT INTO student (sname, login_name, password) 
-                        VALUES ('$name', '$username', '$password')";
+            $sql = "INSERT INTO student (sname, login_name, password, university, major, GPA) 
+                        VALUES ('$name', '$username', '$password', '$university', '$major', '$gpa')";
             mysqli_query($db, $sql);
+            mysqli_query($db, "COMMIT");
             $_SESSION["username"] = $username;
             $_SESSION["success"] = "You are now logged in";
             header('location: index_student.php');
@@ -86,11 +93,17 @@
         // ensure company name is not taken
         if (count($errors) == 0)
         {
-            $sql = "SELECT cname FROM company WHERE cname = '$companyname'";
-            $result = mysqli_query($db, $sql);
+            mysqli_query($db, "START TRANSACTION"); 
+            $stmt = $db->prepare("SELECT cname FROM company WHERE cname = ? FOR UPDATE");
+            $stmt->bind_param('s', $companyname);
+            $stmt->execute();
+            $result = $stmt->get_result();
+//             $sql = "SELECT cname FROM company WHERE cname = '$companyname' FOR UPDATE";
+//             $result = mysqli_query($db, $sql);
             if (mysqli_num_rows($result) > 0)
             {
                 array_push($errors, "Company name have already been taken.");
+                mysqli_query($db, "COMMIT"); 
             }
         }
         
@@ -100,6 +113,7 @@
             $sql = "INSERT INTO company (cname, password, location, industry)
                         VALUES ('$companyname', '$password', '$location', '$industry')";
             mysqli_query($db, $sql);
+            mysqli_query($db, "COMMIT"); 
             $_SESSION["companyname"] = $companyname;
             $_SESSION["success"] = "You are now logged in";
             header('location: index_company.php');
@@ -125,8 +139,12 @@
         if (count($errors) == 0)
         {
             $password = md5($password); // encrypt password
-            $query = "SELECT * FROM student WHERE login_name = '$username' AND password = '$password'";
-            $result = mysqli_query($db, $query);
+            $stmt = $db->prepare("SELECT * FROM student WHERE login_name = ? AND password = ?");
+            $stmt->bind_param('ss', $username, $password);
+            $stmt->execute();
+            $result = $stmt->get_result();
+//             $query = "SELECT * FROM student WHERE login_name = '$username' AND password = '$password'";
+//             $result = mysqli_query($db, $query);
             if (mysqli_num_rows($result) == 1)
             {
                 // log user in
@@ -160,8 +178,12 @@
         if (count($errors) == 0)
         {
             $password = md5($password); // encrypt password
-            $query = "SELECT * FROM company WHERE cname = '$companyname' AND password = '$password'";
-            $result = mysqli_query($db, $query);
+            $stmt = $db->prepare("SELECT * FROM company WHERE cname = ? AND password = ?");
+            $stmt->bind_param('ss', $companyname, $password);
+            $stmt->execute();
+            $result = $stmt->get_result();
+//             $query = "SELECT * FROM company WHERE cname = '$companyname' AND password = '$password'";
+//             $result = mysqli_query($db, $query);
             if (mysqli_num_rows($result) == 1)
             {
                 // log user in
@@ -308,11 +330,13 @@
         
         if (count($errors) == 0)
         {
-            $sql = "SELECT cname FROM company WHERE cname = '$name'";
+            mysqli_query($db, "START TRANSACTION"); 
+            $sql = "SELECT * FROM company WHERE cname = '$name' FOR UPDATE";
             $result = mysqli_query($db, $sql);
             if (mysqli_num_rows($result) > 0)
             {
                 array_push($errors, "Company name have already been taken.");
+                mysqli_query($db, "COMMIT"); 
             }
         }
         
@@ -322,14 +346,44 @@
                 " WHERE cid = ".$_SESSION['company_id'];
             #echo $query;
             $result = mysqli_query($db, $query);
+            mysqli_query($db, "COMMIT"); 
             $_SESSION['companyname'] = $name;
             header('location: setting_company.php?');
             
         }
     }
+
+    
+// Edit Job post
+    if (isset($_POST['edit_job']))
+    {
+        $location = mysqli_real_escape_string($db, $_POST['job_location']);
+        $title = mysqli_real_escape_string($db, $_POST['job_title']);
+        $background = mysqli_real_escape_string($db, $_POST['job_background']);
+        $salary = mysqli_real_escape_string($db, $_POST['job_salary']);
+        $description = mysqli_real_escape_string($db, $_POST['job_description']);
+        // ensure that form fiels are filled properly
+        if (empty($location))
+        {
+            array_push($errors, "Location is required.");
+        }
+        if (empty($title))
+        {
+            array_push($errors, "Title is required.");
+        }
+        
+        if (count($errors) == 0)
+        {
+            $query = "UPDATE job SET title = '$title', location = '$location', salary = '$salary', background = '$background', description = '$description'".
+                " WHERE jid = ".$_POST['job_id'];
+            echo $query;
+            $result = mysqli_query($db, $query);
+            header('location: setting_job.php?job_id='.$_POST['job_id']);
+            
+        }
+    }
     
 //     Send message
-// Edit Company info
     if (isset($_POST['message_student']))
     {
         $content = mysqli_real_escape_string($db, $_POST['message_content']);
@@ -348,5 +402,101 @@
             #echo $query;
             $result = mysqli_query($db, $query);   
         }
+    }
+    
+//     Job checking student number meeting criterion
+    $count_number = array();
+    if (isset($_POST['job_checknumber']))
+    {
+        $university = mysqli_real_escape_string($db, $_POST['job_university']);
+        $major = mysqli_real_escape_string($db, $_POST['job_major']);
+        $gpa = mysqli_real_escape_string($db, $_POST['job_gpa']);
+        $keyword1 = mysqli_real_escape_string($db, $_POST['job_keyword1']);
+        $keyword2 = mysqli_real_escape_string($db, $_POST['job_keyword2']);
+        // ensure that form fiels are filled properly
+        if ($gpa == '')
+        {
+            array_push($errors, "Minimun GPA is required.");
+        }
+        
+        if (count($errors) == 0)
+        {
+            $query = "SELECT count(*) number FROM student WHERE university LIKE '%$university%' AND major LIKE '%$major%' AND GPA >= $gpa AND keywords like '%$keyword1%' AND keywords like '%$keyword2%'";
+            #echo $query;
+            $result = mysqli_query($db, $query);
+            $r = $result->fetch_assoc();
+            array_push($count_number, $r['number']);
+        }
+    }
+    
+//     Job broadcast
+    $broadcast_state = array();
+    if (isset($_POST['job_broadcast']))
+    {
+        $university = mysqli_real_escape_string($db, $_POST['job_university']);
+        $major = mysqli_real_escape_string($db, $_POST['job_major']);
+        $gpa = mysqli_real_escape_string($db, $_POST['job_gpa']);
+        $keyword1 = mysqli_real_escape_string($db, $_POST['job_keyword1']);
+        $keyword2 = mysqli_real_escape_string($db, $_POST['job_keyword2']);
+        $jid = $_POST['job_id'];
+        date_default_timezone_set('US/Eastern');
+        $time = date('Y-m-d H:i:s');
+        // ensure that form fiels are filled properly
+        if ($gpa == '')
+        {
+            array_push($errors, "Minimun GPA is required.");
+        }
+        
+        if (count($errors) == 0)
+        {
+            $query = "INSERT INTO notify_job ".
+                "SELECT $jid, sid, '$time', 'unview' FROM student WHERE university LIKE '%$university%' AND major LIKE '%$major%' AND GPA >= $gpa AND keywords like '%$keyword1%' AND keywords like '%$keyword2%'";
+            #echo $query;
+            $result = mysqli_query($db, $query);
+            array_push($broadcast_state, 'success!');
+        }
+    }
+    
+//     Job recommend
+    $recommend_state = array();
+    if (isset($_POST['recommend_job']))
+    {
+        $sid = $_POST['recommend_to'];
+        $jid = $_POST['recommend_job'];
+        date_default_timezone_set('US/Eastern');
+        $time = date('Y-m-d H:i:s');
+        // ensure that form fiels are filled properly
+        
+        if (count($errors) == 0)
+        {
+            $query = "INSERT INTO notify_job ".
+                "VALUES ($jid, $sid, '$time', 'unview')";
+            #echo $query;
+            $result = mysqli_query($db, $query);
+            array_push($recommend_state, 'success!');
+        }
+    }
+    
+//     upload resume
+    $resume_errors = array();
+    $resume_success = array();
+    if (isset($_POST['upload_resume']))
+    {
+        $name = $_FILES['resume']['name'];
+        $type = $_FILES['resume']['type'];
+        
+        
+        if ($type == 'application/pdf')
+        {
+            $data = file_get_contents($_FILES['resume']['tmp_name']);
+            $stmt = $db->prepare("UPDATE student SET resume = ? WHERE sid = ".$_SESSION['student_id']);
+            $null = NULL;
+            $stmt->bind_param("b", $null);
+            $stmt->send_long_data(0, $data); 
+            $stmt->execute();
+            array_push($resume_success, "Upload successful!");
+        }
+        else
+            array_push($resume_errors, "Please upload a pdf format file.");
     }
 ?>

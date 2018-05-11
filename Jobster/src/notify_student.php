@@ -20,13 +20,14 @@
     <?php if (mysqli_num_rows($result) > 0): ?>
     	<table>
     		<tr>
-    			<th>Name</th>
     			<th>Time</th>
+    			<th>Name</th>
+    			<th>Action</th>
     		</tr>
     		<?php foreach ($result as $r):?>
     		<tr>
-    			<td><?php echo $r['sname'];?></td>
     			<td><?php echo $r['time'];?></td>
+    			<td><?php echo $r['sname'];?></td>
     			<td>
     				<form method="post" action="notify_student.php">
     					<input type="hidden"  name="request_time" value='<?php echo $r['time'];?>'>
@@ -55,14 +56,14 @@
     <?php if (mysqli_num_rows($result) > 0): ?>
     	<table>
     		<tr>
-    			<th>Name</th>
     			<th>Time</th>
+    			<th>Name</th>
     			<th>Action</th>
     		</tr>
     		<?php foreach ($result as $r):?>
     		<tr>
-    			<td><?php echo $r['sname'];?></td>
     			<td><?php echo $r['time'];?></td>
+    			<td><?php echo $r['sname'];?></td>
     			<?php if ($r['answer'] == null): ?>
     				<td>
         				<form method="post" action="notify_student.php">
@@ -91,14 +92,14 @@
     <?php if (mysqli_num_rows($result) > 0): ?>
     	<table>
     		<tr>
-    			<th>Name</th>
     			<th>Time</th>
+    			<th>Name</th>
     			<th>Outcome</th>
     		</tr>
     		<?php foreach ($result as $r):?>
     		<tr>
-    			<td><?php echo $r['sname'];?></td>
     			<td><?php echo $r['time'];?></td>
+    			<td><?php echo $r['sname'];?></td>
     			<td>
     				<?php if ($r['answer'] == 'yes'): ?>
     				<p>Agreed</p>
@@ -127,14 +128,14 @@
     <?php if (mysqli_num_rows($result) > 0): ?>
     	<table>
     		<tr>
-    			<th>Name</th>
     			<th>Time</th>
+    			<th>Name</th>
     			<th>Outcome</th>
     		</tr>
     		<?php foreach ($result as $r):?>
     		<tr>
-    			<td><?php echo $r['sname'];?></td>
     			<td><?php echo $r['time'];?></td>
+    			<td><?php echo $r['sname'];?></td>
     			<td>
     				<?php if ($r['answer'] == 'yes'): ?>
     				<p>Agreed</p>
@@ -160,12 +161,15 @@
     <?php if (mysqli_num_rows($result) > 0): ?>
     	<table>
     		<tr>
+    			<th width = 30%>Time</th>
     			<th>Company</th>
     			<th>Title</th>
     			<th>Location</th>
+    			<th>Action</th>
     		</tr>
     		<?php foreach ($result as $r):?>
     		<tr>
+    			<td><?php echo $r['time'];?></td>
     			<td><?php echo $r['cname'];?></td>
     			<td><?php echo $r['title'];?></td>
     			<td><?php echo $r['location'];?></td>
@@ -209,12 +213,15 @@
     <?php if (mysqli_num_rows($result) > 0): ?>
     	<table>
     		<tr>
+    			<th width = 30%>Time</th>
     			<th>Company</th>
     			<th>Title</th>
     			<th>Location</th>
+    			<th>Action</th>
     		</tr>
     		<?php foreach ($result as $r):?>
     		<tr>
+    			<td><?php echo $r['time']?></td>
     			<td><?php echo $r['cname'];?></td>
     			<td><?php echo $r['title'];?></td>
     			<td><?php echo $r['location'];?></td>

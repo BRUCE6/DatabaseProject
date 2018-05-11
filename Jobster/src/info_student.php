@@ -1,18 +1,22 @@
 <?php $ptitle = "Jobster | People";?>
 <?php include 'server.php';
     // if user is not logged in, they cannot access this page
-    if (empty($_SESSION['username']))
+    if (empty($_SESSION['companyname']))
     {
         header('location: /Jobster/start.html');
     }
+
+    if (!isset($_GET['info_student']) or empty($_GET['info_student']))
+    {
+        header('location: index_company.php');
+    }
 ?>
 <?php require_once $_SERVER["DOCUMENT_ROOT"] . '/Jobster/src/head.php';?>
-<?php require_once $_SERVER["DOCUMENT_ROOT"] . '/Jobster/src/menu_student.php';?>
-<?php require_once $_SERVER["DOCUMENT_ROOT"] . '/Jobster/src/nav_student.php';?>
+<?php require_once $_SERVER["DOCUMENT_ROOT"] . '/Jobster/src/menu_company.php';?>
+<?php require_once $_SERVER["DOCUMENT_ROOT"] . '/Jobster/src/nav_company.php';?>
 <div class = "content">
     <?php 
-    mysqli_query($db, "START TRANSACTION");
-    $query = "SELECT sname, university, major, GPA, keywords FROM student WHERE sid = ".$_GET['detail_student']." LOCK IN SHARE MODE";
+    $query = "SELECT sname, university, major, GPA, keywords FROM student WHERE sid = ".$_GET['info_student'];
     #echo $query;
     $result = mysqli_query($db, $query);
     ?>
@@ -39,27 +43,15 @@
         			<th>keyword</th>
         			<td><?php echo $r['keywords'];?></td>
         		</tr>
-        		<?php if ($_GET['detail_student'] == $_SESSION['student_id']): ?>
         		<tr>
         			<th>Resume</th>
         			<td>
-        				<a target = '_blank' href='view_resume.php?resume_id=<?php echo $_SESSION['student_id']?>'>link</a>
+        				<a target = '_blank' href='view_resume.php?resume_id=<?php echo $_GET['info_student']?>'>link</a>
         			</td>
         		</tr>
-        		<tr>
-                	<th>
-                    	<form action = 'edit_student.php'>
-                    		<button type = "submit">Edit</button>
-                    	</form>
-                	</th>
-                	<td></td>
-                </tr>
-                		
-                <?php endif?>
     		<?php endforeach?>
     	</table>
     <?php endif?>
-    <?php mysqli_query($db, "COMMIT"); ?>
     
 </div>
 <?php require_once $_SERVER["DOCUMENT_ROOT"] . '/Jobster/src/footer.php';?>

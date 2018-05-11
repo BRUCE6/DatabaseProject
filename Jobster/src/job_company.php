@@ -12,7 +12,7 @@
 
 <div class = "content">
 <?php 
-$query = "SELECT title, location FROM job WHERE cid = ".$_SESSION['company_id'];
+$query = "SELECT jid, title, location FROM job WHERE cid = ".$_SESSION['company_id'];
 $result = mysqli_query($db, $query);
 ?>
 <?php if (mysqli_num_rows($result) > 0): ?>
@@ -20,11 +20,17 @@ $result = mysqli_query($db, $query);
 		<tr>
 			<th>Job Title</th>
 			<th>Location</th>
+			<th>More</th>
 		</tr>
 		<?php foreach ($result as $r):?>
 		<tr>
 			<td><?php echo $r['title'];?></td>
 			<td><?php echo $r['location'];?></td>
+			<td>
+				
+				<a href = "setting_job.php?job_id=<?php echo $r['jid'];?>">More</a>
+    				
+			</td>
 		</tr>
 		<?php endforeach?>
 	</table>

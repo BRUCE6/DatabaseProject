@@ -18,10 +18,9 @@
 <?php require_once $_SERVER["DOCUMENT_ROOT"] . '/Jobster/src/nav_student.php';?>
 <div class = "content">
 <?php if (isset($_SESSION["username"])):?>
-	<p>Welcome <strong><?php echo $_SESSION["student_id"];?></strong></p>
 	<h2>Jobs from following companies</h2>
 	<?php 
-    $query = "SELECT C.cname, J.title ,J.location, J.time FROM job J, company C, follow F WHERE F.cid = J.cid AND J.cid = C.cid AND F.sid = ".$_SESSION['student_id']." ORDER BY J.time DESC";
+    $query = "SELECT C.cname, J.title ,J.location, J.time, J.jid FROM job J, company C, follow F WHERE F.cid = J.cid AND J.cid = C.cid AND F.sid = ".$_SESSION['student_id']." ORDER BY J.time DESC";
     #echo $query;
     $result = mysqli_query($db, $query);
     ?>
@@ -32,6 +31,7 @@
 			<th>Job Title</th>
 			<th>Location</th>
 			<th>Post time</th>
+			<th>More</th>
 		</tr>
 		<?php foreach ($result as $r):?>
 		<tr>
@@ -39,11 +39,11 @@
 			<td><?php echo $r['title'];?></td>
 			<td><?php echo $r['location'];?></td>
 			<td><?php echo $r['time'];?></td>
+			<td><a href = detail_job.php?detail_job=<?php echo $r['jid']?>>More</a></td>
 		</tr>
 		<?php endforeach?>
     	</table>
     <?php endif?>
-	<p><a href="index_student.php?logout='1'" style = "color: red;">Logout</a></p>
 <?php endif?>
 </div>
 <?php require_once $_SERVER["DOCUMENT_ROOT"] . '/Jobster/src/footer.php';?>

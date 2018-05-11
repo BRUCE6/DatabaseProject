@@ -30,7 +30,7 @@
     		</tr>
     		<?php foreach ($result as $r):?>
     		<tr>
-    			<td><?php echo $r['sname'];?></td>
+    			<td><a href = 'info_student.php?info_student=<?php $r['sid']?>'><?php echo $r['sname'];?></a></td>
     			<td><?php echo $r['university'];?></td>
     			<td><?php echo $r['major'];?></td>
     			<td><?php echo $r['title'];?></td>
@@ -65,7 +65,7 @@
     		</tr>
     		<?php foreach ($result as $r):?>
     		<tr>
-    			<td><?php echo $r['sname'];?></td>
+    			<td><a href = 'info_student.php?info_student=<?php echo $r['sid']?>'><?php echo $r['sname'];?></a></td>
     			<td><?php echo $r['university'];?></td>
     			<td><?php echo $r['major'];?></td>
     			<td><?php echo $r['title'];?></td>

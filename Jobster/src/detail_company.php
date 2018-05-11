@@ -5,6 +5,10 @@
     {
         header('location: /Jobster/start.html');
     }
+    if (empty($_GET['detail_company']) or !isset($_GET['detail_company']))
+    {
+        header('location: index_student.php');
+    }
 ?>
 <?php require_once $_SERVER["DOCUMENT_ROOT"] . '/Jobster/src/head.php';?>
 <?php require_once $_SERVER["DOCUMENT_ROOT"] . '/Jobster/src/menu_student.php';?>
@@ -12,7 +16,8 @@
 <div class = "content">
 <?php if (isset($_SESSION["username"])):?>
 	<?php 
-    $query = "SELECT cname, location, industry FROM company WHERE cid = ".$_GET['detail_company'];
+	mysqli_query($db, "START TRANSACTION"); 
+    $query = "SELECT cname, location, industry FROM company WHERE cid = ".$_GET['detail_company']." LOCK IN SHARE MODE";
     #echo $query;
     $result = mysqli_query($db, $query);
     ?>
@@ -32,9 +37,12 @@
     		<?php endforeach?>
     	</table>
     <?php endif?>
+    <?php mysqli_query($db, "COMMIT"); ?>
+    
     <h2>Jobs</h2>
     <?php 
-    $query = "SELECT title, location, time FROM job WHERE cid = ".$_GET['detail_company'];
+    mysqli_query($db, "START TRANSACTION"); 
+    $query = "SELECT title, location, time FROM job WHERE cid = ".$_GET['detail_company']." LOCK IN SHARE MODE";
     #echo $query;
     $result = mysqli_query($db, $query);
     ?>
@@ -54,6 +62,7 @@
     		<?php endforeach?>
     	</table>
     <?php endif?>
+    <?php mysqli_query($db, "COMMIT"); ?>
 <?php endif?>
 </div>
 <?php require_once $_SERVER["DOCUMENT_ROOT"] . '/Jobster/src/footer.php';?>

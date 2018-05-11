@@ -11,6 +11,24 @@
 <?php require_once $_SERVER["DOCUMENT_ROOT"] . '/Jobster/src/nav_student.php';?>
 
 <div class = "content">
+<!-- 	Search box -->
+	<form method = "post" action = "search_job.php">
+		<table>
+			<tr>
+				<th>Title</th>
+				<td><input type = "text" name = "job_title"></td>
+			</tr>
+			<tr>
+				<th>Location</th>
+				<td><input type = "text" name = "job_location"></td>
+			</tr>
+			<tr>
+				<th><button type = "submit" name = "job_search">Search</button></th>
+				<td></td>
+			</tr>
+		</table>
+	</form>
+	
 <!-- Applied Jobs -->
 	<h2>Applied Jobs</h2>
     <?php 
@@ -29,7 +47,7 @@
     		</tr>
     		<?php foreach ($result as $r):?>
     		<tr>
-    			<td><?php echo $r['cname'];?></td>
+    			<td><a href = "detail_company.php?detail_company=<?php echo $r['cid']?>"><?php echo $r['cname'];?></a></td>
     			<td><?php echo $r['title'];?></td>
     			<td><?php echo $r['location'];?></td>
     			<?php 
@@ -57,7 +75,7 @@
     <?php endif?>
     
 <!-- Other Jobs -->
-	<h2>Other jobs</h2>
+	<h2>Other Jobs</h2>
     <?php 
     $query = "SELECT C.cid, C.cname, J.title, J.location, J.jid FROM job J JOIN company C ON J.cid = C.cid ".
         "AND J.jid NOT IN (SELECT jid FROM apply WHERE sid = ".$_SESSION['student_id'].")";
@@ -74,7 +92,7 @@
     		</tr>
     		<?php foreach ($result as $r):?>
     		<tr>
-    			<td><?php echo $r['cname'];?></td>
+    			<td><a href = "detail_company.php?detail_company=<?php echo $r['cid']?>"><?php echo $r['cname'];?></a></td>
     			<td><?php echo $r['title'];?></td>
     			<td><?php echo $r['location'];?></td>
     			<?php 

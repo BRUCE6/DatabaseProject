@@ -7,6 +7,7 @@
 body {
 	font-size: 120%;
 	background: #F8F8FF;
+	font-family: "Trebuchet MS", Helvetica, sans-serif;
 }
 
 .header {
@@ -26,7 +27,7 @@ form, .content {
 	margin: 0px auto;
 	padding: 20px;
 	border: 1px solid #BOC4DE;
-	background: white;
+	background-color: white;
 	border-raidus: 0px 0px 10px 10px;
 }
 
@@ -46,6 +47,10 @@ form, .content {
 	font-size: 20px;
 	text-align: center;
 	margin: 3px;
+}
+
+.input-group a:hover, .input-group a:active{
+	background-color: #d6d6d6 !important;
 }
 
 .input-group input {

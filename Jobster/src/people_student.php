@@ -11,6 +11,23 @@
 <?php require_once $_SERVER["DOCUMENT_ROOT"] . '/Jobster/src/nav_student.php';?>
 
 <div class = "content">
+<!-- 	Search box -->
+	<form method = "post" action = "search_people.php">
+		<table>
+			<tr>
+				<th>University</th>
+				<td><input type = "text" name = "people_university"></td>
+			</tr>
+			<tr>
+				<th>Major</th>
+				<td><input type = "text" name = "people_major"></td>
+			</tr>
+			<tr>
+				<th><button type = "submit" name = "people_search">Search</button></th>
+				<td></td>
+			</tr>
+		</table>
+	</form>
 	
 <!--     Friends -->
 	<h2>Friends</h2>

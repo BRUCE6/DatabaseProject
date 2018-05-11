@@ -22,15 +22,15 @@
 		<table>
     		<tr>
     			<th width = 40%>Company Name</th>
-    			<td><input type = "text" name = "company_name" value = <?php echo $r['cname']?>></td>
+    			<td><input type = "text" name = "company_name" value = '<?php echo $r['cname']?>'></td>
     		</tr>
     		<tr>
     			<th>Location</th>
-    			<td><input type = "text" name = "company_location" value = <?php echo $r['location']?>></td>
+    			<td><input type = "text" name = "company_location" value = '<?php echo $r['location']?>'></td>
     		</tr>
     		<tr>
     			<th>Industry</th>
-    			<td><input type = "text" name = "company_industry" value = <?php echo $r['industry']?>></td>
+    			<td><input type = "text" name = "company_industry" value = '<?php echo $r['industry']?>'></td>
     		</tr>
     		<tr>
     			<th><button type = "submit" name = "edit_company" class = "btn">Update</button></th>

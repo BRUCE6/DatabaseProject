@@ -19,7 +19,7 @@
     
 	<table>
 		<tr>
-			<th width = 30%>Company Name</th>
+			<th width = 40%>Company Name</th>
 			<td><?php echo $r['cname'];?></td>
 		</tr>
 		<tr>
@@ -31,7 +31,11 @@
 			<td><?php echo $r['industry'];?></td>
 		</tr>
 		<tr>
-			<th><a href = "edit_company.php"><button>Edit</button></a></th>
+			<th>
+    			<form action = "edit_company.php">
+    				<button type = "submit">Edit</button>
+    			</form>
+			</th>
             <td></td>
 		</tr>
 	</table>
